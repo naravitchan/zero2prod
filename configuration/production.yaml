@@ -2,3 +2,9 @@ application:
   host: 0.0.0.0
 database:
   require_ssl: true
+
+email_client:
+  base_url: "https://api.postmarkapp.com"
+  # Use the single sender email you authorised on Postmark!
+  sender_email: "naravich@enres.co"
+  authorization_token: "909a5191-0a12-4ce6-ba8a-9c0fa6ffae27"
