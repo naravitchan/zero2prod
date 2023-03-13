@@ -1,1 +1,2 @@
-Zero to Production in Rust
+Zero to Production in Rust ¯\_(°ペ)_/¯
+==========================
