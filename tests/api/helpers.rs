@@ -136,18 +136,6 @@ pub struct ConfirmationLinks {
     pub plain_text: reqwest::Url,
 }
 
-async fn add_test_user(pool: &PgPool) {
-    sqlx::query!(
-        "INSERT INTO users (user_id, username, password_hash) VALUES ($1, $2, $3)",
-        Uuid::new_v4(),
-        Uuid::new_v4().to_string(),
-        Uuid::new_v4().to_string(),
-    )
-    .execute(pool)
-    .await
-    .expect("Failed to create test users.");
-}
-
 pub struct TestUser {
     pub user_id: Uuid,
     pub username: String,
