@@ -28,7 +28,7 @@ impl EmailClient {
 
     pub async fn send_email(
         &self,
-        recipient: SubscriberEmail,
+        recipient: &SubscriberEmail,
         subject: &str,
         html_content: &str,
         text_content: &str,
@@ -100,7 +100,7 @@ mod tests {
         let content: String = Paragraph(1..10).fake();
         // Act
         let _ = email_client
-            .send_email(subscriber_email, &subject, &content, &content)
+            .send_email(&subscriber_email, &subject, &content, &content)
             .await;
         // Assert
     }
@@ -111,9 +111,7 @@ mod tests {
         // Arrange
         let mock_server = MockServer::start().await;
         let email_client = email_client(mock_server.uri());
-        let subscriber_email = SubscriberEmail::parse(SafeEmail().fake()).unwrap();
-        let subject: String = Sentence(1..2).fake();
-        let content: String = Paragraph(1..10).fake();
+
         Mock::given(any())
             .respond_with(ResponseTemplate::new(200))
             .expect(1)
@@ -121,7 +119,7 @@ mod tests {
             .await;
         // Act
         let outcome = email_client
-            .send_email(subscriber_email, &subject, &content, &content)
+            .send_email(&email(), &subject(), &content(), &content())
             .await;
         // Assert
         assert_ok!(outcome);
@@ -132,9 +130,7 @@ mod tests {
         // Arrange
         let mock_server = MockServer::start().await;
         let email_client = email_client(mock_server.uri());
-        let subscriber_email = SubscriberEmail::parse(SafeEmail().fake()).unwrap();
-        let subject: String = Sentence(1..2).fake();
-        let content: String = Paragraph(1..10).fake();
+
         Mock::given(any())
             // Not a 200 anymore!
             .respond_with(ResponseTemplate::new(500))
@@ -143,7 +139,7 @@ mod tests {
             .await;
         // Act
         let outcome = email_client
-            .send_email(subscriber_email, &subject, &content, &content)
+            .send_email(&email(), &subject(), &content(), &content())
             .await;
         // Assert
         assert_err!(outcome);
@@ -154,9 +150,6 @@ mod tests {
         // Arrange
         let mock_server = MockServer::start().await;
         let email_client = email_client(mock_server.uri());
-        let subscriber_email = SubscriberEmail::parse(SafeEmail().fake()).unwrap();
-        let subject: String = Sentence(1..2).fake();
-        let content: String = Paragraph(1..10).fake();
         let response = ResponseTemplate::new(200) // 3 minutes!
             .set_delay(std::time::Duration::from_secs(180));
         Mock::given(any())
@@ -166,7 +159,7 @@ mod tests {
             .await;
         // Act
         let outcome = email_client
-            .send_email(subscriber_email, &subject, &content, &content)
+            .send_email(&email(), &subject(), &content(), &content())
             .await;
         // Assert
         assert_err!(outcome);
@@ -188,7 +181,7 @@ mod tests {
             .await;
         // Act
         let _ = email_client
-            .send_email(email(), &subject(), &content(), &content())
+            .send_email(&email(), &subject(), &content(), &content())
             .await;
         // Assert
     }
