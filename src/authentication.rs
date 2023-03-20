@@ -59,6 +59,7 @@ fn verify_password_hash(
 ) -> Result<(), AuthError> {
     let expected_password_hash = PasswordHash::new(expected_password_hash.expose_secret())
         .context("Failed to parse hash in PHC string format.")?;
+
     Argon2::default()
         .verify_password(
             password_candidate.expose_secret().as_bytes(),

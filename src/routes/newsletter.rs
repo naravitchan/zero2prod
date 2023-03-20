@@ -28,12 +28,6 @@ impl std::fmt::Debug for PublishError {
 }
 
 impl ResponseError for PublishError {
-    // fn status_code(&self) -> StatusCode {
-    //     match self {
-    //         PublishError::UnexpectedError(_) => StatusCode::INTERNAL_SERVER_ERROR, // Return a 401 for auth errors
-    //         PublishError::AuthError(_) => StatusCode::UNAUTHORIZED,
-    //     }
-    // }
     fn error_response(&self) -> HttpResponse {
         match self {
             PublishError::UnexpectedError(_) => {
@@ -66,7 +60,7 @@ fn basic_authentication(headers: &HeaderMap) -> Result<Credentials, anyhow::Erro
         .context("Failed to base64-decode 'Basic' credentials.")?;
     let decoded_credentials = String::from_utf8(decoded_bytes)
         .context("The decoded credential string is not valid UTF8.")?;
-    // Split into two segments, using ':' as delimitator
+
     let mut credentials = decoded_credentials.splitn(2, ':');
     let username = credentials
         .next()
