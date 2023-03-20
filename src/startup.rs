@@ -15,32 +15,6 @@ use std::net::TcpListener;
 use tracing_actix_web::TracingLogger;
 pub struct ApplicationBaseUrl(pub String);
 
-// pub async fn build(configuration: &Settings) -> Result<Server, std::io::Error> {
-//     let connection_pool = get_connection_pool(&configuration.database);
-//     let sender_email = configuration
-//         .email_client
-//         .sender()
-//         .expect("Invalid sender email address.");
-//     let timeout = configuration.email_client.timeout();
-//     let email_client = EmailClient::new(
-//         configuration.email_client.base_url.clone(),
-//         sender_email,
-//         configuration.email_client.authorization_token.clone(),
-//         timeout,
-//     );
-//     let address = format!(
-//         "{}:{}",
-//         configuration.application.host, configuration.application.port
-//     );
-//     let listener = TcpListener::bind(address)?;
-//     run(
-//         listener,
-//         connection_pool,
-//         email_client,
-//         configuration.application.base_url.clone(),
-//     )
-// }
-
 pub fn get_connection_pool(configuration: &DatabaseSettings) -> PgPool {
     PgPoolOptions::new()
         .connect_timeout(std::time::Duration::from_secs(2))
@@ -63,14 +37,14 @@ pub fn run(
             .route("/", web::get().to(home))
             .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(login))
-            .route("/newsletters", web::post().to(publish_newsletter))
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
             .route("/subscriptions/confirm", web::get().to(confirm))
+            .route("/newsletters", web::post().to(publish_newsletter))
             .app_data(db_pool.clone())
             .app_data(email_client.clone())
             .app_data(base_url.clone())
-            .app_data(Data::new(hmac_secret.clone()))
+            .app_data(Data::new(HmacSecret(hmac_secret.clone())))
     })
     .listen(listener)?
     .run();

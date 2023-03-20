@@ -1,5 +1,4 @@
 use crate::startup::HmacSecret;
-
 use actix_web::{http::header::ContentType, web, HttpResponse};
 use hmac::{Hmac, Mac};
 use secrecy::ExposeSecret;
@@ -36,9 +35,9 @@ pub async fn login_form(
             }
             Err(e) => {
                 tracing::warn!(
-                error.message = %e,
-                error.cause_chain = ?e,
-                "Failed to verify query parameters using the HMAC tag"
+                    error.message = %e,
+                    error.cause_chain = ?e,
+                    "Failed to verify query parameters using the HMAC tag"
                 );
                 "".into()
             }
@@ -48,28 +47,31 @@ pub async fn login_form(
         .content_type(ContentType::html())
         .body(format!(
             r#"<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title>Login</title>
-    </head>
-    <body>
-        {error_html}
-        <form action="/login" method="post">
-            <label>Username
-                <input
-                    type="text"
-                    placeholder="Enter Username"
-                    name="username"
-    > </label>
-            <label>Password
-                <input
-                    type="password"
-                    placeholder="Enter Password"
-                    name="password"
-    > </label>
-            <button type="submit">Login</button>
-        </form>
-    </body></html>"#,
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Login</title>
+</head>
+<body>
+    {error_html}
+    <form action="/login" method="post">
+        <label>Username
+            <input
+                type="text"
+                placeholder="Enter Username"
+                name="username"
+            >
+        </label>
+        <label>Password
+            <input
+                type="password"
+                placeholder="Enter Password"
+                name="password"
+            >
+        </label>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>"#,
         ))
 }
