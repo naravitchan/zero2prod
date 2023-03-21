@@ -27,7 +27,6 @@ tracing-actix-web = "0.5"
 serde-aux = "3"
 unicode-segmentation = "1"
 validator = "0.14"
-reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls"] }
 linkify = "0.8"
 rand = { version = "0.8", features=["std_rng"] }
 thiserror = "1"
@@ -40,6 +39,10 @@ htmlescape = "0.3"
 hmac = { version = "0.12", features = ["std"] }
 sha2 = "0.10"
 hex = "0.4"
+[dependencies.reqwest]
+version = "0.11"
+default-features = false
+features = ["json", "rustls-tls", "cookies"]
 [dependencies.sqlx]
 version = "0.5.7"
 default-features = false
