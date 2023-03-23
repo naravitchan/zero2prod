@@ -15,7 +15,6 @@ pub enum AuthError {
 }
 
 pub struct Credentials {
-    // These two fields were not marked as `pub` before!
     pub username: String,
     pub password: Secret<String>,
 }
