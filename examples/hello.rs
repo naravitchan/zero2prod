@@ -40,6 +40,7 @@ fn main() {
 
     // .route("/logout", web::post().to(log_out)),
     // pub async fn log_out(session: TypedSession) -> Result<HttpResponse, actix_web::Error> {
+    // reu
 }
 
 // fn post() {
@@ -48,17 +49,18 @@ fn main() {
 //     log_out(request, payload)
 // }
 
+type request = i32;
+
 #[derive(Debug)]
-struct Fruit2(i32);
+struct Fruit2(request);
 impl Fruit2 {
-    pub fn from_request(a: i32) -> Self {
-        // Fruit2.from_request();
+    pub fn from_request(a: request) -> Self {
         Fruit2(a)
     }
 }
 
-impl From<i32> for Fruit2 {
-    fn from(a: i32) -> Self {
+impl From<request> for Fruit2 {
+    fn from(a: request) -> Self {
         Self::from_request(a)
         // Fruit2(a)
     }

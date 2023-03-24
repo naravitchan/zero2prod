@@ -24,7 +24,7 @@ impl TypedSession {
     }
 }
 
-// https://docs.rs/axum/latest/axum/extract/trait.FromRequest.html
+// https://docs.rs/actix-web/latest/actix_web/trait.FromRequest.html#implementing-an-extractor
 impl FromRequest for TypedSession {
     // This is a complicated way of saying
     // "We return the same error returned by the
