@@ -72,7 +72,7 @@ pub async fn publish_newsletter(
     let response = save_response(&pool, &idempotency_key, *user_id, response)
         .await
         .map_err(e500)?;
-    Ok(see_other("/admin/newsletters"))
+    Ok(response)
 }
 
 struct ConfirmedSubscriber {
