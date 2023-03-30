@@ -49,18 +49,18 @@ fn main() {
 //     log_out(request, payload)
 // }
 
-type request = i32;
+type Request = i32;
 
 #[derive(Debug)]
-struct Fruit2(request);
+struct Fruit2(Request);
 impl Fruit2 {
-    pub fn from_request(a: request) -> Self {
+    pub fn from_request(a: Request) -> Self {
         Fruit2(a)
     }
 }
 
-impl From<request> for Fruit2 {
-    fn from(a: request) -> Self {
+impl From<Request> for Fruit2 {
+    fn from(a: Request) -> Self {
         Self::from_request(a)
         // Fruit2(a)
     }
