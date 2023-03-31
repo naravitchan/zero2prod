@@ -25,14 +25,13 @@ pub struct FormData {
 
 #[tracing::instrument(
     name = "Publish a newsletter issue",
-    skip(form, pool, email_client, user_id),
-    fields(user_id=%*user_id)
+    skip_all,
+    fields(user_id=%&*user_id)
 )]
 pub async fn publish_newsletter(
     form: web::Form<FormData>,
     pool: web::Data<PgPool>,
-    email_client: web::Data<EmailClient>,
-    user_id: ReqData<UserId>,
+    user_id: web::ReqData<UserId>,
 ) -> Result<HttpResponse, actix_web::Error> {
     let user_id = user_id.into_inner();
     let FormData {
@@ -41,7 +40,6 @@ pub async fn publish_newsletter(
         html_content,
         idempotency_key,
     } = form.0;
-
     let idempotency_key: IdempotencyKey = idempotency_key.try_into().map_err(e400)?;
     let mut transaction = match try_processing(&pool, &idempotency_key, *user_id)
         .await
